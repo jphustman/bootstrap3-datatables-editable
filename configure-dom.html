@@ -1,0 +1,536 @@
+ <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+
+	
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<link rel="shortcut icon" type="image/ico" href="http://www.sprymedia.co.uk/media/images/favicon.ico">
+		
+		<title>Editable DataTable Example - Dom Configuration</title>
+		<style type="text/css" title="currentStyle">
+			@import "media/css/demo_page.css";
+			@import "media/css/demo_table.css";
+			@import "media/css/themes/base/jquery-ui.css";
+			@import "media/css/themes/smoothness/jquery-ui-1.7.2.custom.css";
+		</style>
+
+        <script src="media/js/jquery.min.js" type="text/javascript"></script>
+        <script src="media/js/jquery.dataTables.min.js" type="text/javascript"></script>
+        <script src="media/js/jquery.jeditable.js" type="text/javascript"></script>
+        <script src="media/js/jquery-ui.js" type="text/javascript"></script>
+        <script src="media/js/jquery.validate.js" type="text/javascript"></script>
+        <script src="media/js/jquery.dataTables.editable.js" type="text/javascript"></script>
+
+		<script type="text/javascript" charset="utf-8">
+			$(document).ready( function () {
+				$("#tabs").tabs( {
+					"show": function(event, ui) {
+						var oTable = $('div.dataTables_scrollBody>table.display', ui.panel).dataTable();
+						if ( oTable.length > 0 ) {
+							oTable.fnAdjustColumnSizing();
+						}
+					}
+				} );
+
+				$('#example1').dataTable( {
+					"sScrollY": "200px",
+					"bScrollCollapse": true,
+					"bPaginate": false,
+					"bJQueryUI": true,
+					"aoColumnDefs": [
+						{ "sWidth": "10%", "aTargets": [ -1 ] }
+					]
+				}).makeEditable({
+									sUpdateURL: "UpdateData.php",
+                    							sAddURL: "AddData.php",
+									sAddHttpMethod: "GET", //Used only on google.code live example because google.code server do not support POST request
+                    							sDeleteURL: "DeleteData.php"
+										});
+				
+
+				$('#example2').dataTable( {
+					"sScrollY": "200px",
+					"bScrollCollapse": true,
+					"bPaginate": false,
+					"bJQueryUI": true,
+					"aoColumnDefs": [
+						{ "sWidth": "10%", "aTargets": [ -1 ] }
+					]
+				}).makeEditable({
+									sUpdateURL: "UpdateDataError.php",
+                    							sAddURL: "AddData.php",
+									sAddHttpMethod: "GET", //Used only on google.code live example because google.code server do not support POST request
+                    							sDeleteURL: "DeleteData.php",
+
+                    							sAddNewRowFormId: "formAddNewRow2",
+                    							sAddNewRowButtonId: "btnAddNewRow2",
+                    							sAddNewRowOkButtonId: "btnAddNewRowOk2",
+                    							sAddNewRowCancelButtonId: "btnAddNewRowCancel2",
+                    							sDeleteRowButtonId: "btnDeleteRow2"
+										});
+			} );
+		</script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-17838786-2']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+	</head>
+
+
+
+
+<body id="dt_example">
+		<div id="container">
+			<a href="index.html">Home</a>
+			<a href="http://code.google.com/p/jquery-datatables-editable/wiki/Overview">Wiki</a> 
+			<h1 class="full_width big">
+
+                DataTables Editable DOM Configuration - customize more than one table in the page
+            </h1>
+            
+            <h2>Preamble</h2>
+            <p>This example shows how DataTables Editable can be customized to work with the two tables
+            on the same page. First table that is placed in the first tab in configured as a standard table.
+            For the second is added separate add form, add and delete buttons. The second table
+            is configured to find additional elements by id. If DataTables Editable plugin finds elements that
+            have the same ids as specified in the configuration, it will not auto-generate these elements - only 
+            event handlers will be attached to the existing buttons.
+            </p>
+            <p>To configure elements for the second table, the following tasks need to be done:
+            <ul>
+                <li>Add and delete buttons should be added to a page, these buttons must have the unique id attributes.</li>
+                <li>Custom add new row form should be added to a page, this form must have the unique id attribute.</li>
+                <li>Custom Ok and Cancel buttons should be added to the form. These buttons must have the unique id attributes.</li>
+                <li>Ids of the attributes added in the three previous items should be set in the JQuery DataTables Editable plugin call.</li>
+            </ul
+</p>
+			
+			<h2>Live example</h2>
+
+
+
+<form id="formAddNewRow" action="#" title="Add New Trident Browser">
+        <label for="engine">Rendering engine </label> Trident<br />
+	<input type="hidden" name="engine" id="name" value="Trident" class="required" rel="0" />
+        <br />
+        <label for="browser">Browser</label><br />
+	<input type="text" name="browser" id="browser" rel="1" />
+        <br />
+        <label for="platforms">Platform(s)</label><br />
+	<textarea name="platforms" id="platforms" rel="2"></textarea>
+        <br />
+        <label for="version">Engine version</label><br />
+	<select name="version" id="version" rel="3">
+                <option>1.5</option>
+                <option>1.7</option>
+                <option>1.8</option>
+        </select>
+        <br />
+        <label for="grade">CSS grade</label><br />
+		<input type="radio" name="grade" value="A" rel="4"> First<br>
+		<input type="radio" name="grade" value="B" rel="4"> Second<br>
+		<input type="radio" name="grade" value="C" checked rel="4"> Third
+        <br />
+</form>
+
+<form id="formAddNewRow2" action="#" title="Add New Gecko Browser">
+	<button id="btnAddNewRowCancel2" value="cancel">Cancel</button>
+	<button id="btnAddNewRowOk2" value="Ok">Add Gecko Browser</button>
+	<br />
+        <label for="engine">Rendering engine </label> Gecko<br />
+	<input type="hidden" name="engine" id="name" value="Gecko" class="required" rel="0" />
+        <br />
+        <label for="browser">Browser</label><br />
+	<input type="text" name="browser" id="browser" rel="1" />
+        <br />
+        <label for="platforms">Platform(s)</label><br />
+	<textarea name="platforms" id="platforms" rel="2"></textarea>
+        <br />
+        <label for="version">Engine version</label><br />
+	<select name="version" id="version" rel="3">
+                <option>1.5</option>
+                <option>1.7</option>
+                <option>1.8</option>
+        </select>
+        <br />
+        <label for="grade">CSS grade</label><br />
+		<input type="radio" name="grade" value="A" rel="4"> First<br>
+		<input type="radio" name="grade" value="B" rel="4"> Second<br>
+		<input type="radio" name="grade" value="C" checked rel="4"> Third
+        <br />
+</form>
+
+
+
+
+
+			<div id="demo">
+
+				<div id="tabs">
+					<ul>
+						<li><a href="#tabs-1">Trident browsers</a></li>
+						<li><a href="#tabs-2">Gecko browsers</a></li>
+					</ul>
+					
+					<div id="tabs-1">
+<button id="btnDeleteRow">Delete Selected Trident Browser</button> <button id="btnAddNewRow">Add Trident Browser</button>
+<table cellpadding="0" cellspacing="0" border="0" class="display" id="example1">
+	<thead>
+
+		<tr>
+			<th>Rendering engine</th>
+			<th>Browser</th>
+			<th>Platform(s)</th>
+			<th>Engine version</th>
+			<th>Grade</th>
+
+		</tr>
+	</thead>
+	<tfoot>
+		<tr>
+			<th>Rendering engine</th>
+			<th>Browser</th>
+			<th>Platform(s)</th>
+
+			<th>Engine version</th>
+			<th>Grade</th>
+		</tr>
+	</tfoot>
+	<tbody>
+		<tr id="1" class="odd gradeX">
+			<td>Trident</td>
+
+			<td>Internet
+				 Explorer 4.0</td>
+			<td>Win 95+</td>
+			<td class="center">4</td>
+			<td class="center">X</td>
+		</tr>
+		<tr id="1" class="odd gradeC">
+			<td>Trident</td>
+
+			<td>Internet
+				 Explorer 5.0</td>
+			<td>Win 95+</td>
+			<td class="center">5</td>
+			<td class="center">C</td>
+		</tr>
+		<tr id="1" class="odd gradeA">
+			<td>Trident</td>
+
+			<td>Internet
+				 Explorer 5.5</td>
+			<td>Win 95+</td>
+			<td class="center">5.5</td>
+			<td class="center">A</td>
+		</tr>
+		<tr id="1" class="odd gradeA">
+			<td>Trident</td>
+
+			<td>Internet
+				 Explorer 6</td>
+			<td>Win 98+</td>
+			<td class="center">6</td>
+			<td class="center">A</td>
+		</tr>
+		<tr id="1" class="odd gradeA">
+			<td>Trident</td>
+
+			<td>Internet Explorer 7</td>
+			<td>Win XP SP2+</td>
+			<td class="center">7</td>
+			<td class="center">A</td>
+		</tr>
+		<tr id="1" class="odd gradeA">
+			<td>Trident</td>
+
+			<td>AOL browser (AOL desktop)</td>
+			<td>Win XP</td>
+			<td class="center">6</td>
+			<td class="center">A</td>
+		</tr>
+	</tbody>
+</table>
+
+					</div>
+
+
+					<div id="tabs-2">
+<button id="btnDeleteRow2">Delete Selected Gecko Browser</button> <button id="btnAddNewRow2">Add New Gecko Browser</button>
+<table cellpadding="0" cellspacing="0" border="0" class="display" id="example2">
+	<thead>
+		<tr>
+			<th>Rendering engine</th>
+			<th>Browser</th>
+
+			<th>Platform(s)</th>
+			<th>Engine version</th>
+			<th>Grade</th>
+		</tr>
+	</thead>
+	<tfoot>
+		<tr>
+
+			<th>Rendering engine</th>
+			<th>Browser</th>
+			<th>Platform(s)</th>
+			<th>Engine version</th>
+			<th>Grade</th>
+		</tr>
+
+	</tfoot>
+	<tbody>
+		<tr id="1" class="gradeA">
+			<td>Gecko</td>
+			<td>Firefox 1.0</td>
+			<td>Win 98+ / OSX.2+</td>
+			<td class="center">1.7</td>
+
+			<td class="center">A</td>
+		</tr>
+		<tr id="1" class="gradeA">
+			<td>Gecko</td>
+			<td>Firefox 1.5</td>
+			<td>Win 98+ / OSX.2+</td>
+			<td class="center">1.8</td>
+
+			<td class="center">A</td>
+		</tr>
+		<tr id="1" class="gradeA">
+			<td>Gecko</td>
+			<td>Firefox 2.0</td>
+			<td>Win 98+ / OSX.2+</td>
+			<td class="center">1.8</td>
+
+			<td class="center">A</td>
+		</tr>
+		<tr id="1" class="gradeA">
+			<td>Gecko</td>
+			<td>Firefox 3.0</td>
+			<td>Win 2k+ / OSX.3+</td>
+			<td class="center">1.9</td>
+
+			<td class="center">A</td>
+		</tr>
+		<tr id="1" class="gradeA">
+			<td>Gecko</td>
+			<td>Camino 1.0</td>
+			<td>OSX.2+</td>
+			<td class="center">1.8</td>
+
+			<td class="center">A</td>
+		</tr>
+		<tr id="1" class="gradeA">
+			<td>Gecko</td>
+			<td>Camino 1.5</td>
+			<td>OSX.3+</td>
+			<td class="center">1.8</td>
+
+			<td class="center">A</td>
+		</tr>
+		<tr id="1" class="gradeA">
+			<td>Gecko</td>
+			<td>Netscape 7.2</td>
+			<td>Win 95+ / Mac OS 8.6-9.2</td>
+			<td class="center">1.7</td>
+
+			<td class="center">A</td>
+		</tr>
+		<tr id="1" class="gradeA">
+			<td>Gecko</td>
+			<td>Netscape Browser 8</td>
+			<td>Win 98SE+</td>
+			<td class="center">1.7</td>
+
+			<td class="center">A</td>
+		</tr>
+		<tr id="1" class="gradeA">
+			<td>Gecko</td>
+			<td>Netscape Navigator 9</td>
+			<td>Win 98+ / OSX.2+</td>
+			<td class="center">1.8</td>
+
+			<td class="center">A</td>
+		</tr>
+		<tr id="1" class="gradeA">
+			<td>Gecko</td>
+			<td>Mozilla 1.0</td>
+			<td>Win 95+ / OSX.1+</td>
+			<td class="center">1</td>
+
+			<td class="center">A</td>
+		</tr>
+		<tr id="1" class="gradeA">
+			<td>Gecko</td>
+			<td>Mozilla 1.1</td>
+			<td>Win 95+ / OSX.1+</td>
+			<td class="center">1.1</td>
+
+			<td class="center">A</td>
+		</tr>
+		<tr id="1" class="gradeA">
+			<td>Gecko</td>
+			<td>Mozilla 1.2</td>
+			<td>Win 95+ / OSX.1+</td>
+			<td class="center">1.2</td>
+
+			<td class="center">A</td>
+		</tr>
+		<tr id="1" class="gradeA">
+			<td>Gecko</td>
+			<td>Mozilla 1.3</td>
+			<td>Win 95+ / OSX.1+</td>
+			<td class="center">1.3</td>
+
+			<td class="center">A</td>
+		</tr>
+		<tr id="1" class="gradeA">
+			<td>Gecko</td>
+			<td>Mozilla 1.4</td>
+			<td>Win 95+ / OSX.1+</td>
+			<td class="center">1.4</td>
+
+			<td class="center">A</td>
+		</tr>
+		<tr id="1" class="gradeA">
+			<td>Gecko</td>
+			<td>Mozilla 1.5</td>
+			<td>Win 95+ / OSX.1+</td>
+			<td class="center">1.5</td>
+
+			<td class="center">A</td>
+		</tr>
+		<tr id="1" class="gradeA">
+			<td>Gecko</td>
+			<td>Mozilla 1.6</td>
+			<td>Win 95+ / OSX.1+</td>
+			<td class="center">1.6</td>
+
+			<td class="center">A</td>
+		</tr>
+		<tr id="1" class="gradeA">
+			<td>Gecko</td>
+			<td>Mozilla 1.7</td>
+			<td>Win 98+ / OSX.1+</td>
+			<td class="center">1.7</td>
+
+			<td class="center">A</td>
+		</tr>
+		<tr id="1" class="gradeA">
+			<td>Gecko</td>
+			<td>Mozilla 1.8</td>
+			<td>Win 98+ / OSX.1+</td>
+			<td class="center">1.8</td>
+
+			<td class="center">A</td>
+		</tr>
+		<tr id="1" class="gradeA">
+			<td>Gecko</td>
+			<td>Seamonkey 1.1</td>
+			<td>Win 98+ / OSX.2+</td>
+			<td class="center">1.8</td>
+
+			<td class="center">A</td>
+		</tr>
+		<tr id="1" class="gradeA">
+			<td>Gecko</td>
+			<td>Epiphany 2.20</td>
+			<td>Gnome</td>
+			<td class="center">1.8</td>
+
+			<td class="center">A</td>
+		</tr>
+	</tbody>
+</table>
+					</div>
+				</div>
+			</div>
+			<div class="spacer"></div>
+     <h2>Custom DOM elements - add/delete buttons</h2>
+     <p>Add and delete buttons should be added in HTML code of the page so DataTables Editable plugin can attach add/delete event handlers to these buttons instead of the auto-generated ones.</p>
+     <pre>
+     &lt;button id=&quot;btnDeleteRow2&quot;&gt;Delete Selected Gecko Browser&lt;/button&gt; &lt;button id=&quot;btnAddNewRow2&quot;&gt;Add New Gecko Browser&lt;/button&gt;
+     
+     </pre>
+			     <h2>Custom DOM elements - add new row form</h2>
+              <p>Custom add new row form should be added to the page with ok and cancel buttons. When DataTables Editable plugin get ids of the ok and cancel buttons,
+               detects that buttons exist, it will attach ok and cancel event handlers to these buttons.
+     <pre>
+       &lt;form id=&quot;formAddNewRow2&quot; action=&quot;#&quot; title=&quot;Add New Gecko Browser&quot;&gt;
+          &lt;button id=&quot;btnAddNewRowCancel2&quot; value=&quot;cancel&quot;&gt;Cancel&lt;/button&gt;
+          &lt;button id=&quot;btnAddNewRowOk2&quot; value=&quot;Ok&quot;&gt;Add Gecko Browser&lt;/button&gt;
+ 
+          &lt;!-- INPUT elements of the form --&gt;
+
+      &lt;/form&gt;    
+     </pre>
+			<h2>Initialization code (for the second table in the second tab)</h2>
+          <p>In the DataTable Editable initialization call should be passed ids of the elements listed in previous examples. When the DataTables Editable plugin detects that
+          elements with these ids exist in the page, it will not autogenerate the new ones with default ids - it will attach event handlers to the
+          existing buttons instead.
+			<pre>
+
+
+
+$('#example2').dataTable( {
+					"sScrollY": "200px",
+					"bScrollCollapse": true,
+					"bPaginate": false,
+					"bJQueryUI": true,
+					"aoColumnDefs": [
+						{ "sWidth": "10%", "aTargets": [ -1 ] }
+					]
+				}).makeEditable({
+									sUpdateURL: "UpdateData.php",
+                    							sAddURL: "AddData.php",
+                    							sDeleteURL: "DeleteData.php",
+
+                    							sAddNewRowFormId: "formAddNewRow2",
+                    							sAddNewRowButtonId: "btnAddNewRow2",
+                    							sAddNewRowOkButtonId: "btnAddNewRowOk2",
+                    							sAddNewRowCancelButtonId: "btnAddNewRowCancel2",
+                    							sDeleteRowButtonId: "btnDeleteRow2"
+										});
+			} );
+</pre>
+			
+<h2>Other examples</h2>
+			<ul>
+				<li><a href="index.html">Home</a></li>
+				<li><a href="inline-edit.html">Editing cells</a></li>
+				<li><a href="addingrecords.html">Adding a new record</a></li>
+				<li><a href="delete-record.html">Delete records</a></li>
+				<li><a href="custom-editors.html">Custom editors</a></li>
+				<li><a href="inline-validation.html">Validation of inline cells</a></li>
+				<li><a href="events.html">Pre-processing and post-processing events</a></li>
+				<li><a href="customization.html">User interface customizations</a></li>
+				<li><a href="custom-messages.html">Customization of message dialogs</a></li>
+				<li><a href="customize-buttons.html">Customization of buttons and form</a></li>
+				<li><a href="configure-dom.html">Two different tables on the same page</a></li>
+				<li><a href="ajax.html">Using Ajax source</a></li>
+			</ul>
+
+			
+			
+			<div id="footer" style="text-align:center;">
+				<span style="font-size:10px;">
+					DataTables Editable &copy; Jovan Popovic 2010-2011.
+				</span>
+			</div>
+		</div>
+	</body>
+
+
+
+
+
+
+</html>
